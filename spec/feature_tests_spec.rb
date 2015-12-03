@@ -1,9 +1,9 @@
 describe "Feature Tests" do
   let(:card) {Oystercard.new}
   let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
-  let(:minimum_fare) {Journey::MINIMUM_FARE}
+  let(:minimum_fare) {JourneyLog::MINIMUM_FARE}
   let(:station) {Station.new(:name, :zone)}
-  let(:journey) {Journey.new}
+  let(:journeylog) {JourneyLog.new}
   let(:penalty_fare) {Oystercard::PENALTY_FARE}
 
 
@@ -29,7 +29,7 @@ describe "Feature Tests" do
         it 'allows a card to touch in and begin journey if balance greater than minimum fare' do
           card.top_up(minimum_fare)
           card.touch_in(station)
-          expect(card.journey.current_journey[:entry_station]).to eq(station)
+          expect(card.journeylog.current_journey[:entry_station]).to eq(station)
         end
       end
 
@@ -51,7 +51,7 @@ describe "Feature Tests" do
 
       it 'allows a card to touch out and end a journey' do
           card.touch_out(station)
-          expect(card.journey.current_journey[:entry_station]).to eq(nil)
+          expect(card.journeylog.current_journey[:entry_station]).to eq(nil)
       end
 
       it 'charges customer when they tap out' do
@@ -60,7 +60,7 @@ describe "Feature Tests" do
 
       it 'clears the entry station upon touch out' do
         card.touch_out((station))
-        expect(card.journey.current_journey[:entry_station]).to eq nil
+        expect(card.journeylog.current_journey[:entry_station]).to eq nil
       end
 
     end
@@ -72,7 +72,7 @@ describe "Feature Tests" do
         card.top_up(minimum_fare)
         card.touch_in(entry_station)
         card.touch_out(exit_station)
-        expect(card.journey.journey_history).to eq [{entry_station: entry_station, exit_station: exit_station}]
+        expect(card.journeylog.journey_history).to eq [{entry_station: entry_station, exit_station: exit_station}]
       end
     end
   end
@@ -102,7 +102,7 @@ describe "Feature Tests" do
   describe 'Journey' do
   describe 'Journey defaults' do
     it 'is initially not in a journey' do
-      expect(journey.current_journey[:entry_station]).to eq(nil)
+      expect(journeylog.current_journey[:entry_station]).to eq(nil)
     end
   end
 
