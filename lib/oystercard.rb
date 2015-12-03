@@ -10,6 +10,7 @@ class Oystercard
   def initialize
     @balance = 0
     @journeylog = JourneyLog.new
+    @previous = :touch_out
   end
 
   def top_up(value)
@@ -19,13 +20,23 @@ class Oystercard
 
   def touch_in(station)
     fail "Insufficent funds: top up" if min_balance?
-    deduct if journeylog.not_touched_out
+    @balance -= PENALTY_FARE if @previous == :touch_in
     journeylog.touch_in(station)
+    @previous = :touch_in
   end
 
   def touch_out(station)
     journeylog.touch_out(station)
-    deduct
+  if @previous == :touch_out
+    @balance -= PENALTY_FARE
+  else
+    @balance -= journeylog.journey.fare
+  end
+    @previous = :touch_out
+  end
+
+  def current_journey
+    journeylog.current_journey
   end
 
 
@@ -34,12 +45,6 @@ class Oystercard
   def min_balance?
     balance < MINIMUM_FARE
   end
-
-  def deduct
-    @balance -= journeylog.fare
-  end
-
-
 
   def over_capacity?(value)
     value + balance > MAXIMUM_BALANCE
