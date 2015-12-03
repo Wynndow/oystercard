@@ -1,9 +1,11 @@
 describe "Feature Tests" do
   let(:card) {Oystercard.new}
   let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
-  let(:minimum_fare) {Oystercard::MINIMUM_FARE}
+  let(:minimum_fare) {Journey::MINIMUM_FARE}
   let(:station) {Station.new(:name, :zone)}
   let(:journey) {Journey.new}
+  let(:penalty_fare) {Oystercard::PENALTY_FARE}
+
 
   describe 'Oystercard' do
 
@@ -98,9 +100,6 @@ describe "Feature Tests" do
   end
 
   describe 'Journey' do
-# In order to be charged correctly
-# As a customer
-# I need a penalty charge deducted if I fail to touch in or out
   describe 'Journey defaults' do
     it 'is initially not in a journey' do
       expect(journey.current_journey[:entry_station]).to eq(nil)
@@ -108,14 +107,14 @@ describe "Feature Tests" do
   end
 
   it 'deducts a penalty charge if I no touch in' do
-    card.top_up(20)
-    expect { card.touch_out(station) }.to change { card.balance }.by -6
+    card.top_up(minimum_fare)
+    expect { card.touch_out(station) }.to change { card.balance }.by -penalty_fare
   end
 
   it 'deducts a penalty charge if no touch out' do
-    card.top_up(20)
+    card.top_up(minimum_fare+10)
     card.touch_in(station)
-    expect {card.touch_in(station)}.to change { card.balance }.by -6
+    expect {card.touch_in(station)}.to change { card.balance }.by -penalty_fare
   end
 
 

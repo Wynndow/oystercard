@@ -4,8 +4,9 @@ require 'oystercard'
 describe Oystercard do
   subject(:card) { described_class.new }
   let(:maximum_balance) { Oystercard::MAXIMUM_BALANCE}
-  let(:minimum_fare) {Oystercard::MINIMUM_FARE}
+  let(:minimum_fare) {Journey::MINIMUM_FARE}
   let(:station) {double :station}
+  let(:penalty_fare) {Journey::PENALTY_FARE}
 
   describe '#balance' do
     it 'creates a card with a balance' do
@@ -30,11 +31,16 @@ describe Oystercard do
       expect{ card.touch_in(station) }.to raise_error "Insufficent funds: top up"
     end
 
+    it 'does not deduct a fare if not needed' do
+      card.top_up(minimum_fare)
+      expect { card.touch_in(station) }.to change {card.balance }.by 0
+    end
+
     context 'the customer did not touch out last journey' do
       it 'deducts a penalty charge if no touch out' do
-        card.top_up(20)
+        card.top_up(minimum_fare+10)
         card.touch_in(station)
-        expect {card.touch_in(station)}.to change { card.balance }.by -6
+        expect {card.touch_in(station)}.to change { card.balance }.by -penalty_fare
       end
     end
 
@@ -49,8 +55,8 @@ describe Oystercard do
 
     context 'the customer has not touched in' do
       it 'deducts a penalty charge if I fail to touch in' do
-        card.top_up(20)
-        expect { card.touch_out(station) }.to change { card.balance }.by -6
+        card.top_up(minimum_fare)
+        expect { card.touch_out(station) }.to change { card.balance }.by -penalty_fare
       end
     end
 

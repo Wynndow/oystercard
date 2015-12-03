@@ -2,6 +2,7 @@ require_relative 'journey'
 
 class Oystercard
   MAXIMUM_BALANCE = 90
+  PENALTY_FARE = 6
   MINIMUM_FARE = 1
 
   attr_reader :balance, :journey
@@ -17,14 +18,14 @@ class Oystercard
   end
 
   def touch_in(station)
-    @balance -= 6 if in_journey?
     fail "Insufficent funds: top up" if min_balance?
+    deduct if journey.not_touched_out
     journey.touch_in(station)
   end
 
   def touch_out(station)
     journey.touch_out(station)
-    deduct(MINIMUM_FARE)
+    deduct
   end
 
 
@@ -34,22 +35,15 @@ class Oystercard
     Journey.new
   end
 
-  def deduct(value)
-    value = 6 if missed_touch_out?
-    @balance -= value
-  end
-
-  def missed_touch_out?
-    journey.journey_history[-1][:entry_station] == nil
-  end
-
   def min_balance?
     balance < MINIMUM_FARE
   end
 
-  def in_journey?
-    !!journey.current_journey[:entry_station]
+  def deduct
+    @balance -= journey.fare
   end
+
+
 
   def over_capacity?(value)
     value + balance > MAXIMUM_BALANCE
