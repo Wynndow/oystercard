@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 This is the oyster card challenge for week 2 of the Makers Academy course.
 
 Here are the user stories you will be working on for this project:
@@ -49,3 +50,6 @@ I need a penalty charge deducted if I fail to touch in or out
 In order to be charged the correct amount
 As a customer
 I need to have the correct fare calculated
+=======
+# oystercard
+>>>>>>> a1db8ec1bbe626b9d54e09ff376ff1dbf186f730
