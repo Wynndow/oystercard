@@ -17,20 +17,20 @@ class Oystercard
 
   def_delegators :@journeylog, :current_journey, :fare, :journey_history
 
-  def top_up(value)
-    fail "Maximum balance of £#{MAXIMUM_BALANCE} exceeded" if over_capacity?(value)
-    @balance += value
+  def top_up(amount)
+    fail "Maximum balance of £#{MAXIMUM_BALANCE} exceeded" if over_capacity?(amount)
+    @balance += amount
   end
 
-  def touch_in(station)
+  def touch_in(entry_station)
     fail "Insufficent funds: top up" if min_balance?
     @balance -= PENALTY_FARE if @previous == :touch_in
-    journeylog.set_entry(station)
+    journeylog.set_entry(entry_station)
     @previous = :touch_in
   end
 
-  def touch_out(station)
-    journeylog.touch_out(station)
+  def touch_out(exit_station)
+    journeylog.log_new_journey(exit_station)
     @previous == :touch_out ? @balance -= PENALTY_FARE : @balance -= fare
     @previous = :touch_out
   end

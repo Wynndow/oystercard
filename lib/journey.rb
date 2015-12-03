@@ -14,7 +14,7 @@ class Journey
     @current_journey[:exit_station] = station
   end
 
-  def touch_out
+  def reset_journey
     @current_journey = {}
   end
 

@@ -13,10 +13,10 @@ end
 
 def_delegators :@journey, :current_journey, :fare, :set_entry
 
-def touch_out(station)
+def log_new_journey(station)
   journey.set_exit(station)
   @journey_history << journey.current_journey
-  journey.touch_out
+  journey.reset_journey
 end
 
 def journey_history
