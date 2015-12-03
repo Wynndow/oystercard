@@ -31,10 +31,6 @@ class Oystercard
 
   private
 
-  def start_new_journey
-    Journey.new
-  end
-
   def min_balance?
     balance < MINIMUM_FARE
   end

@@ -1,13 +1,16 @@
+require_relative 'journeylog'
+
 class Journey
 
-attr_reader :journey_history, :current_journey
+attr_reader :current_journey, :journeylog
 
 MINIMUM_FARE = 1
 PENALTY_FARE = 6
 
 def initialize
-  @journey_history = []
+
   @current_journey = {}
+  @journeylog = JourneyLog.new
 end
 
 def touch_in(station)
@@ -16,7 +19,7 @@ end
 
 def touch_out(station)
   set_exit(station)
-  @journey_history << current_journey
+  journey_history << current_journey
   @current_journey = {}
 end
 
@@ -30,10 +33,11 @@ def not_touched_out
   missed_touch_in?
 end
 
-private
-
-def penalty_due
+def journey_history
+  journeylog.journey_history
 end
+
+private
 
 def set_entry(station)
   @current_journey[:entry_station] = station
@@ -44,8 +48,7 @@ def set_exit(station)
 end
 
 def missed_touch_out?
-  return false if journey_history.empty?
-  journey_history[-1][:entry_station] == nil
+  journeylog.missed_touch_out?
 end
 
 def missed_touch_in?
