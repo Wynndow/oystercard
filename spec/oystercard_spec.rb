@@ -1,11 +1,14 @@
 require 'oystercard'
 
 describe Oystercard do
-  subject(:card) { described_class.new }
-  let(:maximum_balance) { Oystercard::MAXIMUM_BALANCE}
   let(:minimum_fare) {Journey::MINIMUM_FARE}
-  let(:station) {double :station}
+  let(:maximum_balance) { Oystercard::MAXIMUM_BALANCE}
   let(:penalty_fare) {Oystercard::PENALTY_FARE}
+
+  let(:journeylog) {double(set_entry: 0, log_new_journey: 0, fare: minimum_fare)}
+  subject(:card) { described_class.new(journeylog: journeylog) }
+
+  let(:station) {double :station}
 
   describe '#balance' do
     it 'creates a card with a balance' do
