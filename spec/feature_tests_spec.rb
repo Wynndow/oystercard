@@ -1,7 +1,7 @@
 describe "Feature Tests" do
   let(:card) {Oystercard.new}
   let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
-  let(:minimum_fare) {JourneyLog::MINIMUM_FARE}
+  let(:minimum_fare) {Journey::MINIMUM_FARE}
   let(:station) {Station.new(:name, :zone)}
   let(:journeylog) {JourneyLog.new}
   let(:penalty_fare) {Oystercard::PENALTY_FARE}

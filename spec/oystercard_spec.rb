@@ -1,12 +1,11 @@
 require 'oystercard'
-#require 'station'
 
 describe Oystercard do
   subject(:card) { described_class.new }
   let(:maximum_balance) { Oystercard::MAXIMUM_BALANCE}
-  let(:minimum_fare) {JourneyLog::MINIMUM_FARE}
+  let(:minimum_fare) {Journey::MINIMUM_FARE}
   let(:station) {double :station}
-  let(:penalty_fare) {Journey::PENALTY_FARE}
+  let(:penalty_fare) {Oystercard::PENALTY_FARE}
 
   describe '#balance' do
     it 'creates a card with a balance' do

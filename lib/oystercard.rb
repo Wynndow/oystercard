@@ -3,7 +3,7 @@ require_relative 'journeylog'
 class Oystercard
   MAXIMUM_BALANCE = 90
   PENALTY_FARE = 6
-  MINIMUM_FARE = 1
+  MINIMUM_BALANCE = 1
 
   attr_reader :balance, :journeylog
 
@@ -31,11 +31,7 @@ class Oystercard
 
   def touch_out(station)
     journeylog.touch_out(station)
-  if @previous == :touch_out
-    @balance -= PENALTY_FARE
-  else
-    @balance -= fare
-  end
+    @previous == :touch_out ? @balance -= PENALTY_FARE : @balance -= fare
     @previous = :touch_out
   end
 
@@ -43,7 +39,7 @@ class Oystercard
   private
 
   def min_balance?
-    balance < MINIMUM_FARE
+    balance < MINIMUM_BALANCE
   end
 
   def over_capacity?(value)
