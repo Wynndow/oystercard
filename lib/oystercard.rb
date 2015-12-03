@@ -7,11 +7,15 @@ class Oystercard
 
   attr_reader :balance, :journeylog
 
-  def initialize
+  extend Forwardable
+
+  def initialize(journeylog: JourneyLog.new)
     @balance = 0
-    @journeylog = JourneyLog.new
+    @journeylog = journeylog
     @previous = :touch_out
   end
+
+  def_delegators :@journeylog, :current_journey, :fare, :journey_history
 
   def top_up(value)
     fail "Maximum balance of £#{MAXIMUM_BALANCE} exceeded" if over_capacity?(value)
@@ -21,7 +25,7 @@ class Oystercard
   def touch_in(station)
     fail "Insufficent funds: top up" if min_balance?
     @balance -= PENALTY_FARE if @previous == :touch_in
-    journeylog.touch_in(station)
+    journeylog.set_entry(station)
     @previous = :touch_in
   end
 
@@ -30,13 +34,9 @@ class Oystercard
   if @previous == :touch_out
     @balance -= PENALTY_FARE
   else
-    @balance -= journeylog.journey.fare
+    @balance -= fare
   end
     @previous = :touch_out
-  end
-
-  def current_journey
-    journeylog.current_journey
   end
 
 
