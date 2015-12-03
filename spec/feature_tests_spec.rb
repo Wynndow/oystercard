@@ -107,9 +107,15 @@ describe "Feature Tests" do
     end
   end
 
-  it 'deducts a penalty charge if I fail to touch in' do
+  it 'deducts a penalty charge if I no touch in' do
     card.top_up(20)
     expect { card.touch_out(station) }.to change { card.balance }.by -6
+  end
+
+  it 'deducts a penalty charge if no touch out' do
+    card.top_up(20)
+    card.touch_in(station)
+    expect {card.touch_in(station)}.to change { card.balance }.by -6
   end
 
 

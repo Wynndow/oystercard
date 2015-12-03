@@ -30,6 +30,14 @@ describe Oystercard do
       expect{ card.touch_in(station) }.to raise_error "Insufficent funds: top up"
     end
 
+    context 'the customer did not touch out last journey' do
+      it 'deducts a penalty charge if no touch out' do
+        card.top_up(20)
+        card.touch_in(station)
+        expect {card.touch_in(station)}.to change { card.balance }.by -6
+      end
+    end
+
   end
 
   describe '#touch_out' do
@@ -45,6 +53,7 @@ describe Oystercard do
         expect { card.touch_out(station) }.to change { card.balance }.by -6
       end
     end
+
   end
 
 
