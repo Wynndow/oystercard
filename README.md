@@ -7,7 +7,7 @@ Will need to run Bundle to install any required files, using the Gemfile.
 ## Guidance
 
 'stage_15_sol' presents the version that solved stage 15 of the week 2 challenge. It has
-been kept as a separate repository, because the code at it was based upon is different.
+been kept as a separate repository, because the code it was based upon is different.
 
 ## The user stories:
 
