@@ -5,7 +5,7 @@ describe Oystercard do
   let(:maximum_balance) { Oystercard::MAXIMUM_BALANCE}
   let(:penalty_fare) {Oystercard::PENALTY_FARE}
 
-  let(:journeylog) {double(set_entry: 0, log_new_journey: 0, fare: minimum_fare)}
+  let(:journeylog) {double(set_entry: 0, set_exit: 0, log_new_journey: 0, fare: minimum_fare)}
   subject(:card) { described_class.new(journeylog: journeylog) }
 
   let(:station) {double :station}

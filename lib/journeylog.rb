@@ -11,10 +11,9 @@ def initialize(journey: Journey.new)
   @journey = journey
 end
 
-def_delegators :@journey, :current_journey, :fare, :set_entry
+def_delegators :@journey, :current_journey, :fare, :set_entry, :set_exit
 
-def log_new_journey(station)
-  journey.set_exit(station)
+def log_new_journey
   @journey_history << journey.current_journey
   journey.reset_journey
 end

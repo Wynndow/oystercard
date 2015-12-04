@@ -19,7 +19,16 @@ class Journey
   end
 
   def fare
-    return MINIMUM_FARE
+    MINIMUM_FARE + no_zones_crossed
+  end
+
+  private
+
+  def no_zones_crossed
+    first_zone = @current_journey[:entry_station].zone
+    second_zone = @current_journey[:exit_station].zone
+    (first_zone - second_zone).abs
+
   end
 
 end

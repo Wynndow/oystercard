@@ -2,7 +2,7 @@ describe "Feature Tests" do
   let(:card) {Oystercard.new}
   let(:maximum_balance) {Oystercard::MAXIMUM_BALANCE}
   let(:minimum_fare) {Journey::MINIMUM_FARE}
-  let(:station) {Station.new(:name, :zone)}
+  let(:station) {Station.new(:name, 1)}
   let(:journeylog) {JourneyLog.new}
   let(:penalty_fare) {Oystercard::PENALTY_FARE}
 
@@ -67,8 +67,8 @@ describe "Feature Tests" do
 
     describe 'previous journeys' do
       it 'can recall all previous journeys' do
-        entry_station = double(:station)
-        exit_station = double(:station)
+        entry_station = Station.new(:station1,1)
+        exit_station = Station.new(:station2,1)
         card.top_up(minimum_fare)
         card.touch_in(entry_station)
         card.touch_out(exit_station)
@@ -116,9 +116,24 @@ describe "Feature Tests" do
     card.touch_in(station)
     expect {card.touch_in(station)}.to change { card.balance }.by -penalty_fare
   end
-
-
-
   end
+
+#Customer touches in at one and touches out at another.
+
+it 'deducts balance by MINIMUM_FARE + 2 if two zones difference' do
+  card.top_up(Oystercard::MAXIMUM_BALANCE)
+  card.touch_in(Station.new('Aldgate', 1))
+  card.touch_out(Station.new('Moorgate', 3))
+  expect(card.balance).to eq Oystercard::MAXIMUM_BALANCE - Journey::MINIMUM_FARE - 2
+end
+
+it 'deducts balance by MINIMUM_FARE if same zone' do
+  entry_station = Station.new('Aldgate', 1)
+  exit_station = Station.new('Moorgate', 1)
+  card.top_up(Oystercard::MAXIMUM_BALANCE)
+  card.touch_in(entry_station)
+  card.touch_out(exit_station)
+  expect(card.balance).to eq Oystercard::MAXIMUM_BALANCE - Journey::MINIMUM_FARE
+end
 
 end
