@@ -2,22 +2,17 @@ require 'station'
 
 describe Station do
 
-subject(:station) {described_class.new(name: "Old Street", zone: 1)}
+let(:station) {described_class.new(:station, 1)}
 
-describe "knows it's name and where it is" do
-  it 'allows a stations zone to be seen' do
-    station = Station.new('Aldgate', 3)
-    expect(station.zone).to eq 3
+describe '#name' do
+  it 'gives name of station' do
+    expect(station.name).to eq :station
   end
+end
 
-  it 'allows a different stations zone to be seen' do
-    station = Station.new('Euston', 2)
-    expect(station.zone).to eq 2
-  end
-
-  it 'allows a stations name to be seen' do
-    station = Station.new('Euston', 2)
-    expect(station.name).to eq 'Euston'
+describe '#zone' do
+  it 'gives zone number of station' do
+    expect(station.zone).to eq 1
   end
 end
 
