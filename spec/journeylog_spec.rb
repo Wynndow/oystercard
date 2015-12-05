@@ -16,6 +16,7 @@ describe JourneyLog do
     it 'clears entry station on touch out' do
       journeylog.set_entry(:station)
       journeylog.log_new_journey
+      journeylog.reset_journey
       expect(journeylog.journey.current_journey[:entry_station]).to eq nil
     end
   end
@@ -27,6 +28,7 @@ describe JourneyLog do
       journeylog.set_entry(entry_station)
       journeylog.set_exit(exit_station)
       journeylog.log_new_journey
+      journeylog.reset_journey
       expect(journeylog.journey_history).to eq [{entry_station: entry_station, exit_station: exit_station}]
     end
   end
